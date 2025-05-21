@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  email    String  @unique
+  password String
+  name     String
+  skills   Skill[]
+}
+
+model Skill {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  level  String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @db.ObjectId
+}
